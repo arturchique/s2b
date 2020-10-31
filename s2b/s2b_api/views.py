@@ -119,6 +119,12 @@ class AdminAddView(APIView):
             size = "l"
 
         try:
+            animal = Animal.objects.get(animal_accounting_card=data["animal_accounting_card"])
+            animal.delete()
+        except Animal.DoesNotExist:
+            pass
+
+        try:
             new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
                                 birth_date=data["birth_date"], weight=float(data["weight"]), shelter=shelter,
                                 name=data["name"], sex=sex, breed=data["breed"], cage_number=int(data["cage_number"]),
