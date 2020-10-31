@@ -25,7 +25,7 @@ class AdminView(APIView):
                 serializer = AnimalSerializer(paged_listings, many=True)
                 return Response({
                     "data": serializer.data,
-                    "status": "Работник приюта",
+                    "status": "w",
                     "total_page_count": paginator.num_pages
                 })
             else:
