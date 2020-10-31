@@ -111,8 +111,8 @@ class Animal(models.Model):
         verbose_name="Акт о поступлении. Дата", null=True, max_length=25,
         help_text="Акт о поступлении. Дата", blank=False
     )
-    leaving_act_date = models.DateField(
-        auto_now=False, verbose_name="Дата выбытия", null=True,
+    leaving_act_date = models.CharField(
+        verbose_name="Дата выбытия", null=True, max_length=20,
         help_text="Дата выбытия", blank=True
     )
     leaving_act_reason = models.CharField(
@@ -125,7 +125,17 @@ class Animal(models.Model):
     )
     catching_act = models.CharField(
         max_length=15, verbose_name="Акт отлова", help_text="Акт отлова",
-        blank=True, null=True,
+        blank=True, null=True
+    )
+
+    catching_act_order = models.CharField(
+        max_length=15, verbose_name="Акт отлова", help_text="Акт отлова",
+        blank=True, null=True
+    )
+
+    catching_act_date = models.CharField(
+        max_length=15, verbose_name="Дата отлова", help_text="Дата отлова",
+        blank=True, null=True
     )
     catching_address = models.CharField(
         max_length=15, verbose_name="Адрес места отлова", help_text="Адрес места отлова",
@@ -182,4 +192,3 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name
-
