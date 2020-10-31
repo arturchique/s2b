@@ -11,4 +11,5 @@ urlpatterns = [
     # path("applications/<str:user_id>", ClientsApplicationsView.as_view()),
     # path("quiz/", ClientsApplicationsView.as_view())
     path("admin/", AdminView.as_view()),
+    path("admin/add", AdminAddView.as_view()),
 ]
