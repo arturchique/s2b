@@ -7,6 +7,31 @@ from .glossary import *
 User = get_user_model()
 
 
+class Shelter(models.Model):
+    name = models.CharField(
+        max_length=40, blank=False, verbose_name="Название приюта",
+        help_text="Название приюта"
+    )
+    address = models.CharField(
+        max_length=100, blank=False, verbose_name="Адресс приюта",
+        help_text="Адресс приюта"
+    )
+    prefecture = models.CharField(
+        max_length=80, blank=False, verbose_name="Подчинение",
+        help_text="Подчинение (например: Префектура ЮВАО)"
+    )
+    phone_number = models.CharField(
+        max_length=20, blank=True, verbose_name="Номер телефона",
+        help_text="Номер телефона", null=True
+    )
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+
 class Animal(models.Model):
     animal_accounting_card = models.CharField(
         primary_key=True, max_length=20, blank=False, help_text="Номер карточки учета животного",
@@ -135,35 +160,10 @@ class Animal(models.Model):
         help_text="Дата медосмотра", null=True
     )
     anamnesis = models.CharField(verbose_name="Анамнез", blank=True, help_text="Анамнез", max_length=20, null=True)
-
-
-class Shelter(models.Model):
-    name = models.CharField(
-        max_length=40, blank=False, verbose_name="Название приюта",
-        help_text="Название приюта"
+    shelter = models.ForeignKey(
+        Shelter, help_text="Приют", verbose_name="Приют",
+        blank=False, null=True, on_delete=models.CASCADE
     )
-    address = models.CharField(
-        max_length=100, blank=False, verbose_name="Адресс приюта",
-        help_text="Адресс приюта"
-    )
-    prefecture = models.CharField(
-        max_length=80, blank=False, verbose_name="Подчинение",
-        help_text="Подчинение (например: Префектура ЮВАО)"
-    )
-    phone_number = models.CharField(
-        max_length=20, blank=True, verbose_name="Номер телефона",
-        help_text="Номер телефона", null=True
-    )
-    animals = models.ManyToManyField(
-        Animal, help_text="Животные", verbose_name="Животные",
-        blank=False, null=True
-    )
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.name
 
 
 class Worker(models.Model):

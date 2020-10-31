@@ -14,9 +14,11 @@ class AdminView(APIView):
     def get(self, request):
         user = request.user
         worker = Worker.objects.get(user=user)
-        shelter_name = worker.shelter.name
+        shelter = worker.shelter
         if worker.position == "w":
-            return Response({"data": "Это работник приюта"})
+            animals = Animal.objects.filter(shelter=shelter)
+            serializer = AnimalSerializer(animals, many=True)
+            return Response({"data": serializer.data})
         elif worker.position == "a":
             return Response({"data": "Это админ приюта"})
         return Response({"data": "ok"})
