@@ -10,3 +10,13 @@ from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from django.contrib.auth import get_user_model
 
 
+class AdminView(APIView):
+    def get(self, request):
+        user = request.user
+        worker = Worker.objects.get(user=user)
+        shelter_name = worker.shelter.name
+        if worker.position == "w":
+            return Response({"data": "Это работник приюта"})
+        elif worker.position == "a":
+            return Response({"data": "Это админ приюта"})
+        return Response({"data": "ok"})

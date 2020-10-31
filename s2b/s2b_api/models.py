@@ -177,4 +177,9 @@ class Worker(models.Model):
         verbose_name="Должность", help_text="Должность", null=True,
         max_length=1, choices=WORKER_POSITIONS_CHOICES, blank=True
     )
+    def __repr__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
 

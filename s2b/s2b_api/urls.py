@@ -10,5 +10,5 @@ urlpatterns = [
     # path("filtered_animals/", AnimalFilterView.as_view()),
     # path("applications/<str:user_id>", ClientsApplicationsView.as_view()),
     # path("quiz/", ClientsApplicationsView.as_view())
-    # path(admin,)
+    path("admin/", AdminView.as_view())
 ]
