@@ -11,6 +11,18 @@ from .glossary import *
 
 
 class AdminView(APIView):
+    def get(self, request):
+        user = request.user
+        animal_accounting_card = request.GET.get("animal_accounting_card", "---------")
+        worker = Worker.objects.get(user=user)
+        shelter = worker.shelter
+        try:
+            animal = Animal.objects.get(animal_accounting_card=animal_accounting_card, shelter=shelter)
+            serializer = AnimalSerializer(animal)
+            return Response({"data": serializer.data})
+        except:
+            return Response({"data": "Такого животного не существует"})
+
     def post(self, request):
         user = request.user
         worker = Worker.objects.get(user=user)
@@ -46,14 +58,14 @@ class AdminAddView(APIView):
                 "birth_date": {"values": "string", "*": 1, "text": "Возраст, дата рождения"},
                 "weight": {"values": "float", "*": 1, "text": "Вес"},
                 "name": {"values": "string", "*": 0, "text": "Кличка"},
-                "sex": {"values": [sex[0] for sex in ANIMAL_SEX_CHOICES], "*": 1, "text": "Пол"},
+                "sex": {"values": ["Мужской", "Женский"], "*": 1, "text": "Пол"},
                 "breed": {"values": [breed[0] for breed in ANIMAL_BREED_CHOICES], "*": 1, "text": "Порода"},
                 "cage_number": {"values": "int", "*": 1, "text": "Номер вольера"},
                 "color": {"values": [color[0] for color in ANIMAL_COLOR_CHOICES], "*": 1, "text": "Окрас"},
                 "hair": {"values": [hair[0] for hair in ANIMAL_HAIR_CHOICES], "*": 1, "text": "Шерсть"},
                 "ears": {"values": [ears[0] for ears in ANIMAL_EAR_CHOICES], "*": 1, "text": "Уши"},
                 "tail": {"values": [tail[0] for tail in ANIMAL_TAIL_CHOICES], "*": 1, "text": "Хвост"},
-                "size": {"values": [size[0] for size in ANIMAL_SIZE_CHOICES], "*": 1, "text": "Размер"},
+                "size": {"values": ["Маленький", "Средний", "Большой"], "*": 1, "text": "Размер"},
                 "identifying_marks": {"values": "string", "*": 1, "text": "Особые приметы ('нет', если нет)"},
                 "animal_id": {"values": "string", "*": 1, "text": "Идентификационная метка"},
                 "sterilization_date": {"values": "string", "*": 1, "text": "Дата стерилизации"},
