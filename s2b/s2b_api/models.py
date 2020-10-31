@@ -45,7 +45,7 @@ class Animal(models.Model):
         verbose_name="Возраст, дата рождения", help_text="Возраст, дата рождения",
         max_length=23, blank=False
     )
-    weight = models.FloatField(max_length=5, verbose_name="Вес", help_text="Вес", blank=False)
+    weight = models.FloatField(max_length=8, verbose_name="Вес", help_text="Вес", blank=False)
     name = models.CharField(
         max_length=20, verbose_name="Кличка", help_text="Кличка", default="без клички",
         blank=False
@@ -100,11 +100,11 @@ class Animal(models.Model):
         blank=False, null=True
     )
     entrance_act = models.CharField(
-        max_length=15, verbose_name="Акт о поступлении", help_text="Акт о поступлении",
+        max_length=40, verbose_name="Акт о поступлении", help_text="Акт о поступлении",
         blank=False, null=True
     )
     leaving_act = models.CharField(
-        max_length=15, verbose_name="Акт о выбытии", help_text="Акт о выбытии",
+        max_length=40, verbose_name="Акт о выбытии", help_text="Акт о выбытии",
         blank=True, null=True
     )
     entrance_act_date = models.CharField(
@@ -112,7 +112,7 @@ class Animal(models.Model):
         help_text="Акт о поступлении. Дата", blank=False
     )
     leaving_act_date = models.CharField(
-        verbose_name="Дата выбытия", null=True, max_length=20,
+        verbose_name="Дата выбытия", null=True, max_length=40,
         help_text="Дата выбытия", blank=True
     )
     leaving_act_reason = models.CharField(
@@ -120,37 +120,37 @@ class Animal(models.Model):
         blank=True, null=True, help_text="Причина выбытия"
     )
     region = models.CharField(
-        max_length=10, verbose_name="Административный округ", help_text="Административный округ",
+        max_length=40, verbose_name="Административный округ", help_text="Административный округ",
         blank=False, null=True
     )
     catching_act = models.CharField(
-        max_length=15, verbose_name="Акт отлова", help_text="Акт отлова",
+        max_length=40, verbose_name="Акт отлова", help_text="Акт отлова",
         blank=True, null=True
     )
 
     catching_act_order = models.CharField(
-        max_length=15, verbose_name="Акт отлова", help_text="Акт отлова",
+        max_length=40, verbose_name="Акт отлова", help_text="Акт отлова",
         blank=True, null=True
     )
 
     catching_act_date = models.CharField(
-        max_length=15, verbose_name="Дата отлова", help_text="Дата отлова",
+        max_length=40, verbose_name="Дата отлова", help_text="Дата отлова",
         blank=True, null=True
     )
     catching_address = models.CharField(
-        max_length=15, verbose_name="Адрес места отлова", help_text="Адрес места отлова",
+        max_length=40, verbose_name="Адрес места отлова", help_text="Адрес места отлова",
         blank=True, null=True,
     )
     legal_entity = models.CharField(
-        max_length=15, verbose_name="Юридическое лицо", help_text="Юридическое лицо",
+        max_length=40, verbose_name="Юридическое лицо", help_text="Юридическое лицо",
         blank=True, null=True
     )
     owner_name = models.CharField(
-        max_length=15, verbose_name="ФИО опекунов", help_text="ФИО опекунов",
+        max_length=40, verbose_name="ФИО опекунов", help_text="ФИО опекунов",
         blank=True, null=True
     )
     person_owner_name = models.CharField(
-        max_length=15, verbose_name="ФИО физического лица", help_text="ФИО физического лица",
+        max_length=40, verbose_name="ФИО физического лица", help_text="ФИО физического лица",
         blank=True, null=True
     )
     staff_name = models.CharField(
