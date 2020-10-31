@@ -8,9 +8,6 @@ from .serializers import *
 from .models import *
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from django.contrib.auth import get_user_model
-import os
-from openpyxl import load_workbook
-from datetime import datetime
 
 
 class AdminView(APIView):
