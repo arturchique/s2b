@@ -108,7 +108,7 @@ class Animal(models.Model):
         blank=True, null=True
     )
     entrance_act_date = models.CharField(
-        verbose_name="Акт о поступлении. Дата", null=True,
+        verbose_name="Акт о поступлении. Дата", null=True, max_length=25,
         help_text="Акт о поступлении. Дата", blank=False
     )
     leaving_act_date = models.DateField(
