@@ -102,23 +102,37 @@ class AdminAddView(APIView):
     def post(self, request):
         user = request.user
         worker = Worker.objects.get(user=user)
+        if worker.position not in ("a", "w"):
+            return Response({"data": "Отказано в доступе"})
         shelter = worker.shelter
         data = request.data
+        sex = "m" if data["sex"] == "Мужской" else "f"
+        if data["size"] == "Маленький":
+            size = "s"
+        elif data["size"] == "Средний":
+            size = "m"
+        else:
+            size = "l"
 
-        new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
-                            birth_date=data["birth_date"], weight=data["weight"], shelter=shelter,
-                            name=data["name"], sex=data["sex"], breed=data["breed"], cage_number=data["cage_number"],
-                            color=data["color"], hair=data["hair"], ears=data["ears"], tail=data["tail"],
-                            size=data["size"], identifying_marks=data["identifying_marks"],
-                            animal_id=data["animal_id"], sterilization_date=data["sterilization_date"],
-                            doctor_name=data["doctor_name"], socialized=data["socialized"], region=data["region"],
-                            catching_act_order=data["catching_act_order"], catching_act_date=data["catching_act_date"],
-                            catching_act=data["catching_act"], catching_address=data["catching_address"],
-                            legal_entity=data["legal_entity"], owner_name=data["owner_name"],
-                            person_owner_name=data["person_owner_name"], entrance_act_date=data["entrance_act_date"],
-                            entrance_act=data["entrance_act"], leaving_act_date=data["leaving_act_date"],
-                            leaving_act_reason=data["leaving_act_reason"], leaving_act=data["leaving_act"],
-                            staff_name=data["staff_name"], parasites_treatment=data["parasites_treatment"],
-                            vaccinations=data["vaccinations"], medical_checkup_date=data["medical_checkup_date"],
-                            anamnesis=data["anamnesis"],
-                            )
+        try:
+            new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
+                                birth_date=data["birth_date"], weight=data["weight"], shelter=shelter,
+                                name=data["name"], sex=sex, breed=data["breed"], cage_number=data["cage_number"],
+                                color=data["color"], hair=data["hair"], ears=data["ears"], tail=data["tail"],
+                                size=size, identifying_marks=data["identifying_marks"],
+                                animal_id=data["animal_id"], sterilization_date=data["sterilization_date"],
+                                doctor_name=data["doctor_name"], socialized=data["socialized"], region=data["region"],
+                                catching_act_order=data["catching_act_order"], catching_act_date=data["catching_act_date"],
+                                catching_act=data["catching_act"], catching_address=data["catching_address"],
+                                legal_entity=data["legal_entity"], owner_name=data["owner_name"],
+                                person_owner_name=data["person_owner_name"], entrance_act_date=data["entrance_act_date"],
+                                entrance_act=data["entrance_act"], leaving_act_date=data["leaving_act_date"],
+                                leaving_act_reason=data["leaving_act_reason"], leaving_act=data["leaving_act"],
+                                staff_name=data["staff_name"], parasites_treatment=data["parasites_treatment"],
+                                vaccinations=data["vaccinations"], medical_checkup_date=data["medical_checkup_date"],
+                                anamnesis=data["anamnesis"]
+                                )
+            new_animal.save()
+            return Response({"data": "Животное успешно сохранено"})
+        except:
+            return Response({"data": "Ошибка"})
