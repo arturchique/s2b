@@ -105,7 +105,7 @@ class AdminAddView(APIView):
         if worker.position not in ("a", "w"):
             return Response({"data": "Отказано в доступе"})
         shelter = worker.shelter
-        data = request.data
+        data = request.data["data"]
 
         socialized = True if data["socialized"] == "true" else False
 
