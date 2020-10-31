@@ -41,7 +41,7 @@ class Animal(models.Model):
         max_length=1, choices=ANIMAL_KIND_CHOICES, verbose_name="Вид животного",
         help_text="Вид животного", blank=False
     )
-    birth_date = models.DateTimeField(
+    birth_date = models.DateField(
         verbose_name="Возраст, дата рождения", help_text="Возраст, дата рождения",
         auto_now=False, blank=False
     )
@@ -107,11 +107,11 @@ class Animal(models.Model):
         max_length=15, verbose_name="Акт о выбытии", help_text="Акт о выбытии",
         blank=True, null=True
     )
-    entrance_act_date = models.DateTimeField(
-        auto_now=False, verbose_name="Акт о поступлении. Дата", null=True,
+    entrance_act_date = models.CharField(
+        verbose_name="Акт о поступлении. Дата", null=True,
         help_text="Акт о поступлении. Дата", blank=False
     )
-    leaving_act_date = models.DateTimeField(
+    leaving_act_date = models.DateField(
         auto_now=False, verbose_name="Дата выбытия", null=True,
         help_text="Дата выбытия", blank=True
     )
@@ -155,7 +155,7 @@ class Animal(models.Model):
         verbose_name="Вакцины", blank=True, max_length=500, null=True,
         help_text="Введите данные о вакцинации в формате: дата, вид вакцины, номер серии"
     )
-    medical_checkup_date = models.DateTimeField(
+    medical_checkup_date = models.DateField(
         verbose_name="Дата медосмотра", blank=True, auto_now=False,
         help_text="Дата медосмотра", null=True
     )
