@@ -19,7 +19,7 @@ class AdminView(APIView):
             if not request.data["filters"]:
                 animals = Animal.objects.filter(shelter=shelter,
                                                 animal_accounting_card__contains=request.data["search"])
-                paginator = Paginator(animals, 6)
+                paginator = Paginator(animals, 15)
                 page = request.data["page"]
                 paged_listings = paginator.get_page(page)
                 serializer = AnimalSerializer(paged_listings, many=True)
