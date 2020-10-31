@@ -131,7 +131,7 @@ class AdminAddView(APIView):
                                 legal_entity=data["legal_entity"], owner_name=data["owner_name"],
                                 person_owner_name=data["person_owner_name"], entrance_act_date=data["entrance_act_date"],
                                 entrance_act=data["entrance_act"], leaving_act_date=data["leaving_act_date"],
-                                leaving_act_reason=data["leaving_act_reason"], leaving_act=data["leaving_act"],
+                                leaving_act_reason=data["leaving_act_reason"],
                                 staff_name=data["staff_name"], parasites_treatment=data["parasites_treatment"],
                                 vaccinations=data["vaccinations"], medical_checkup_date=data["medical_checkup_date"],
                                 anamnesis=data["anamnesis"]
