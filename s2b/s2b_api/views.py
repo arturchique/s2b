@@ -106,7 +106,11 @@ class AdminAddView(APIView):
             return Response({"data": "Отказано в доступе"})
         shelter = worker.shelter
         data = request.data
+
+        socialized = True if data["socialized"] == "true" else False
+
         sex = "m" if data["sex"] == "Мужской" else "f"
+
         if data["size"] == "Маленький":
             size = "s"
         elif data["size"] == "Средний":
@@ -116,12 +120,12 @@ class AdminAddView(APIView):
 
         try:
             new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
-                                birth_date=data["birth_date"], weight=data["weight"], shelter=shelter,
-                                name=data["name"], sex=sex, breed=data["breed"], cage_number=data["cage_number"],
+                                birth_date=data["birth_date"], weight=float(data["weight"]), shelter=shelter,
+                                name=data["name"], sex=sex, breed=data["breed"], cage_number=int(data["cage_number"]),
                                 color=data["color"], hair=data["hair"], ears=data["ears"], tail=data["tail"],
                                 size=size, identifying_marks=data["identifying_marks"],
                                 animal_id=data["animal_id"], sterilization_date=data["sterilization_date"],
-                                doctor_name=data["doctor_name"], socialized=data["socialized"], region=data["region"],
+                                doctor_name=data["doctor_name"], socialized=socialized, region=data["region"],
                                 catching_act_order=data["catching_act_order"], catching_act_date=data["catching_act_date"],
                                 catching_act=data["catching_act"], catching_address=data["catching_address"],
                                 legal_entity=data["legal_entity"], owner_name=data["owner_name"],
