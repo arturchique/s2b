@@ -41,9 +41,9 @@ class Animal(models.Model):
         max_length=1, choices=ANIMAL_KIND_CHOICES, verbose_name="Вид животного",
         help_text="Вид животного", blank=False
     )
-    birth_date = models.DateField(
+    birth_date = models.CharField(
         verbose_name="Возраст, дата рождения", help_text="Возраст, дата рождения",
-        auto_now=False, blank=False
+        max_length=23, blank=False
     )
     weight = models.FloatField(max_length=5, verbose_name="Вес", help_text="Вес", blank=False)
     name = models.CharField(
@@ -83,9 +83,9 @@ class Animal(models.Model):
         verbose_name="Особые приметы", blank=False
     )
     cage_number = models.IntegerField(verbose_name="Вольер N", help_text="Номер вольера", blank=True, null=True, )
-    animal_id = models.BigIntegerField(
+    animal_id = models.CharField(
         verbose_name="Идентификационная метка", help_text="Идентификационная метка",
-        unique=True, blank=False, null=True
+        unique=True, blank=False, null=True, max_length=50
     )
     sterilization_date = models.CharField(
         verbose_name="Дата стериллизации", null=True, max_length=40,
@@ -165,8 +165,8 @@ class Animal(models.Model):
         verbose_name="Вакцины", blank=True, max_length=500, null=True,
         help_text="Введите данные о вакцинации в формате: дата, вид вакцины, номер серии"
     )
-    medical_checkup_date = models.DateField(
-        verbose_name="Дата медосмотра", blank=True, auto_now=False,
+    medical_checkup_date = models.CharField(
+        verbose_name="Дата медосмотра", blank=True, max_length=23,
         help_text="Дата медосмотра", null=True
     )
     anamnesis = models.CharField(verbose_name="Анамнез", blank=True, help_text="Анамнез", max_length=20, null=True)
