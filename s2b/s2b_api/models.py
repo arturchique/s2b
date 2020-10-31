@@ -62,8 +62,8 @@ class Animal(models.Model):
         verbose_name="Идентификационная метка", help_text="Идентификационная метка",
         unique=True, blank=False, null=True
     )
-    sterilization_date = models.DateTimeField(
-        auto_now=False, verbose_name="Дата стериллизации", null=True,
+    sterilization_date = models.CharField(
+        verbose_name="Дата стериллизации", null=True, max_length=40,
         help_text="Дата стериллизации", blank=False
     )
     doctor_name = models.CharField(
