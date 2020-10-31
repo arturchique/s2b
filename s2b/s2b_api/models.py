@@ -7,31 +7,6 @@ from .glossary import *
 User = get_user_model()
 
 
-class Shelter(models.Model):
-    name = models.CharField(
-        max_length=40, blank=False, verbose_name="Название приюта",
-        help_text="Название приюта"
-    )
-    address = models.CharField(
-        max_length=100, blank=False, verbose_name="Адресс приюта",
-        help_text="Адресс приюта"
-    )
-    prefecture = models.CharField(
-        max_length=80, blank=False, verbose_name="Подчинение",
-        help_text="Подчинение (например: Префектура ЮВАО)"
-    )
-    phone_number = models.CharField(
-        max_length=20, blank=True, verbose_name="Номер телефона",
-        help_text="Номер телефона", null=True
-    )
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return self.name
-
-
 class Animal(models.Model):
     animal_accounting_card = models.CharField(
         primary_key=True, max_length=20, blank=False, help_text="Номер карточки учета животного",
@@ -82,7 +57,7 @@ class Animal(models.Model):
         max_length=50, default="нет", help_text="Особые приметы",
         verbose_name="Особые приметы", blank=False
     )
-    cage_number = models.IntegerField(verbose_name="Вольер N", help_text="Номер вольера", blank=True, null=True,)
+    cage_number = models.IntegerField(verbose_name="Вольер N", help_text="Номер вольера", blank=True, null=True, )
     animal_id = models.BigIntegerField(
         verbose_name="Идентификационная метка", help_text="Идентификационная метка",
         unique=True, blank=False, null=True
@@ -143,10 +118,6 @@ class Animal(models.Model):
         max_length=15, verbose_name="ФИО физического лица", help_text="ФИО физического лица",
         blank=True, null=True
     )
-    shelter = models.ForeignKey(
-        Shelter, on_delete=models.CASCADE, help_text="Приют", verbose_name="Приют",
-        blank=False, null=True
-    )
     staff_name = models.CharField(
         max_length=15, verbose_name="ФИО сотрудника по уходу", help_text="ФИО сотрудника по уходу",
         blank=True, null=True
@@ -164,3 +135,46 @@ class Animal(models.Model):
         help_text="Дата медосмотра", null=True
     )
     anamnesis = models.CharField(verbose_name="Анамнез", blank=True, help_text="Анамнез", max_length=20, null=True)
+
+
+class Shelter(models.Model):
+    name = models.CharField(
+        max_length=40, blank=False, verbose_name="Название приюта",
+        help_text="Название приюта"
+    )
+    address = models.CharField(
+        max_length=100, blank=False, verbose_name="Адресс приюта",
+        help_text="Адресс приюта"
+    )
+    prefecture = models.CharField(
+        max_length=80, blank=False, verbose_name="Подчинение",
+        help_text="Подчинение (например: Префектура ЮВАО)"
+    )
+    phone_number = models.CharField(
+        max_length=20, blank=True, verbose_name="Номер телефона",
+        help_text="Номер телефона", null=True
+    )
+    animals = models.ManyToManyField(
+        Animal, help_text="Животные", verbose_name="Животные",
+        blank=False, null=True
+    )
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+
+class Worker(models.Model):
+    name = models.CharField(
+        verbose_name="Имя работника", help_text="Имя работника",
+        max_length=30, blank=True, null=True
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, help_text="Пользователь", null=True)
+    shelter = models.ForeignKey(Shelter, on_delete=models.CASCADE, help_text="Приют", verbose_name="Приют", blank=True)
+    position = models.CharField(
+        verbose_name="Должность", help_text="Должность", null=True,
+        max_length=1, choices=WORKER_POSITIONS_CHOICES, blank=True
+    )
+
