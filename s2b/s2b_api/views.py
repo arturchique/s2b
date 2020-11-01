@@ -260,7 +260,7 @@ class AnimalFilterView(APIView):
         if not request.data["filters"]:
             search_request = request.data["search"]
             animals = Animal.objects.filter(name__contains=search_request)
-            paginator = Paginator(animals, 2)
+            paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
             serializer = AnimalSerializer(paged_listings, many=True)
@@ -321,7 +321,7 @@ class AnimalFilterView(APIView):
                                             sex__in=animal_sex,
                                             animal_size__in=animal_size,
                                             color__in=color_list)
-            paginator = Paginator(animals, 2)
+            paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
             serializer = AnimalSerializer(paged_listings, many=True)
