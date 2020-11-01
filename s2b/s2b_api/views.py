@@ -277,7 +277,7 @@ class AnimalFilterView(APIView):
         """
         if not request.data["filters"]:
             search_request = request.data["search"]
-            animals = Animal.objects.filter(name__contains=search_request) #socialized=True)
+            animals = Animal.objects.filter(name__contains=search_request, socialized=True)
             paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
@@ -286,9 +286,9 @@ class AnimalFilterView(APIView):
             return Response({
                 "status": "ok",
                 "filters": {
-                    "kind": {"c": False, "d": False},
-                    "sex": {"m": False, "f": False},
-                    "size": {"s": False, "m": False, "l": False},
+                    "animal_kind": {"c": False, "d": False},
+                    "animal_sex": {"m": False, "f": False},
+                    "animal_size": {"s": False, "m": False, "l": False},
                 },
                 "animals": serializer.data,
                 "total_page_count": paginator.num_pages,
@@ -298,36 +298,36 @@ class AnimalFilterView(APIView):
             search_request = request.data["search"]
 
             animal_kind = []
-            if data["kind"]["c"]:
+            if data["animal_kind"]["c"]:
                 animal_kind.append("c")
-            if data["kind"]["d"]:
+            if data["animal_kind"]["d"]:
                 animal_kind.append("d")
             if not animal_kind:
                 animal_kind = ["c", "d"]
 
             animal_sex = []
-            if data["sex"]["m"]:
+            if data["animal_sex"]["m"]:
                 animal_sex.append("m")
-            if data["sex"]["f"]:
+            if data["animal_sex"]["f"]:
                 animal_sex.append("f")
             if not animal_sex:
                 animal_sex = ["m", "f"]
 
             animal_size = []
-            if data["size"]["s"]:
+            if data["animal_size"]["s"]:
                 animal_size.append("s")
-            if data["size"]["m"]:
+            if data["animal_size"]["m"]:
                 animal_size.append("m")
-            if data["size"]["l"]:
+            if data["animal_size"]["l"]:
                 animal_size.append("l")
             if not animal_size:
                 animal_size = ["s", "m", "l"]
 
             animals = Animal.objects.filter(name__contains=search_request,
                                             kind__in=animal_kind,
-                                            sex__in=animal_sex,
-                                            size__in=animal_size,
-                                            #socialized=True
+                                            # sex__in=animal_sex,
+                                            # size__in=animal_size,
+                                            socialized=True
                                             )
             paginator = Paginator(animals, 15)
             page = request.data["page"]

@@ -22,7 +22,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path("six_animals/", TopSixAnimalsView.as_view()),
-    path("animal/<str:animal_id>/", AnimalView.as_view()),
+    path("animal/<str:animal_accounting_card>/", AnimalView.as_view()),
     path("filtered_animals/", AnimalFilterView.as_view()),
     path("applications/<str:user_id>", ClientsApplicationsView.as_view()),
     path("quiz/", ClientsApplicationsView.as_view()),

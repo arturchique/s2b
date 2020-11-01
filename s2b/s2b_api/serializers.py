@@ -17,7 +17,7 @@ class AdminAnimalSerializer(serializers.ModelSerializer):
 class AnimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Animal
-        fields = ("sex", "birth_date", "color", "hair", "animal_accounting_card",
-                  "vaccinations", "sterilization_date", "breed", "name")
+        fields = ("sex", "birth_date", "color", "hair", "animal_accounting_card", "size",
+                  "vaccinations", "sterilization_date", "breed", "name", "kind")
 
 
