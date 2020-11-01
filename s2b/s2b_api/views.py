@@ -327,8 +327,8 @@ class AnimalFilterView(APIView):
                 animal_size = ["s", "m", "l"]
 
             color_list = []
-            for key, value in data["color"]:
-                if value:
+            for key in data["color"]:
+                if data["color"][key] == "true":
                     color_list.append(key)
 
             animals = Animal.objects.filter(name__contains=search_request,
