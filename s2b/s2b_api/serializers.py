@@ -8,7 +8,16 @@ class WorkerSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AnimalSerializer(serializers.ModelSerializer):
+class AdminAnimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Animal
         fields = "__all__"
+
+
+class AnimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Animal
+        fields = ("sex", "birth_date", "color", "hair",
+                  "vaccinations", "sterilization_date", "breed")
+
+

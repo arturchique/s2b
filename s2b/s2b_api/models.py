@@ -55,11 +55,11 @@ class Animal(models.Model):
         blank=True, null=True
     )
     breed = models.CharField(
-        max_length=25, choices=ANIMAL_BREED_CHOICES, verbose_name="Порода",
+        max_length=50, choices=ANIMAL_BREED_CHOICES, verbose_name="Порода",
         blank=False, null=False, default="метис", help_text="Порода"
     )
     color = models.CharField(
-        max_length=25, choices=ANIMAL_COLOR_CHOICES, verbose_name="Цвет",
+        max_length=50, choices=ANIMAL_COLOR_CHOICES, verbose_name="Цвет",
         blank=False, null=False, default="черный", help_text="Цвет"
     )
     hair = models.CharField(
@@ -192,3 +192,25 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, help_text="Пользователь", null=True)
+
+    @property
+    def applications(self):
+        return Application.objects.filter(client=self)
+
+
+class Application(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text="Пользователь", null=True)
+    animal = models.OneToOneField(Animal, on_delete=models.CASCADE, help_text="На какое животное сделана заявка")
+    date = models.DateTimeField(auto_now=True, help_text="Дата регистрации заявки")
+    quiz = models.TextField(max_length=500, help_text="Ответы на вопросы", blank=True)
+    status = models.CharField(max_length=1, choices=APPLICATION_STATUS_CHOICES, default="r", help_text="Статус заявки")
+
+    def __str__(self):
+        return self.animal
+
+    def __repr__(self):
+        return self.animal

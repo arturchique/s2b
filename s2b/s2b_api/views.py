@@ -13,18 +13,36 @@ from .reports import docx_export
 
 class AdminView(APIView):
     def get(self, request):
+        """
+        Возвращает данные о животном по animal_accounting_card -- уникальной карточке животного,
+        если оно доступно для ролевой модели текущего пользователя
+
+        формат запроса: s2b/api/v1/admin/?animal_accounting_card=<карточка>
+        header: Authorization: Token <токен>
+        """
         user = request.user
         animal_accounting_card = request.GET.get("animal_accounting_card", "---------")
         worker = Worker.objects.get(user=user)
         shelter = worker.shelter
         try:
             animal = Animal.objects.get(animal_accounting_card=animal_accounting_card, shelter=shelter)
-            serializer = AnimalSerializer(animal)
+            serializer = AdminAnimalSerializer(animal)
             return Response({"data": serializer.data})
         except:
             return Response({"data": "Такого животного не существует"})
 
     def post(self, request):
+        """
+        Возвращает список с данными обо всех животных, доступных для ролевой модели текущего пользователя,
+        подходящих под фильтры (фильтры пока не реализованы, выдает только всех животных, если фильтры пусты)
+
+        формат запроса: s2b/api/v1/admin/
+        header: Authorization: Token <токен>
+        body:
+            filters: "" <-- должно быть пусто на текущий момент
+            page: "страница"
+            search: "номер карточки"  <-- вернет животного с заданным номером карточки, если не оставить поле пустым
+        """
         user = request.user
         worker = Worker.objects.get(user=user)
         shelter = worker.shelter
@@ -35,7 +53,7 @@ class AdminView(APIView):
                 paginator = Paginator(animals, 15)
                 page = request.data["page"]
                 paged_listings = paginator.get_page(page)
-                serializer = AnimalSerializer(paged_listings, many=True)
+                serializer = AdminAnimalSerializer(paged_listings, many=True)
                 return Response({
                     "data": serializer.data,
                     "status": f"{worker.position}",
@@ -50,6 +68,13 @@ class AdminView(APIView):
 
 class AdminAddView(APIView):
     def get(self, request):
+        """
+        Возвращает список полей животных, нужных для заполнения пользователем (если он имеет доступ),
+        чтобы добавить животного в базу
+
+        формат запроса: s2b/api/v1/admin/add/
+        header: Authorization: Token <токен>
+        """
         user = request.user
         worker = Worker.objects.get(user=user)
         if worker.position == "w" or worker.position == "a":
@@ -101,6 +126,13 @@ class AdminAddView(APIView):
             return Response({"status": "Отказано в доступе"})
 
     def post(self, request):
+        """
+        Создает животное в базе данных (если пользователь имеет доступ к созданию животного)
+
+        формат запроса: s2b/api/v1/admin/add/
+        header: Authorization: Token <токен>
+        body: заполненные данными ключи из предыдущего запроса
+        """
         user = request.user
         worker = Worker.objects.get(user=user)
         if worker.position not in ("a", "w"):
@@ -154,6 +186,14 @@ class AdminAddView(APIView):
 
 class AdminReport(APIView):
     def get(self, request):
+        """
+        Создает отчетный документ по животному с заданным номером карточки, возвращает ссылку на него
+        (Если пользователь имеет доступ по иерархии)
+
+        формат запроса: s2b/api/v1/admin/report/
+        header: Authorization: Token <токен>
+        body: animal_accounting_card = номер карточки животного
+        """
         user = request.user
         worker = Worker.objects.get(user=user)
         animal_accounting_card = request.GET.get("animal_accounting_card", "---------")
@@ -173,6 +213,13 @@ class AdminReport(APIView):
 
 class AdminDeleteView(APIView):
     def post(self, request):
+        """
+        Удаляет животное с заданным номером карточки, если пользователь имеет доступ
+
+        формат запроса: s2b/api/v1/admin/delete/
+        header: Authorization: Token <токен>
+        body: animal_accounting_card = номер карточки животного
+        """
         user = request.user
         worker = Worker.objects.get(user=user)
         if worker.position not in ("a", "w"):
@@ -187,3 +234,117 @@ class AdminDeleteView(APIView):
         except Animal.DoesNotExist:
             pass
         return Response({"data": f"Животное {deleted}"})
+
+
+class HelloView(APIView):
+    def get(self, request):
+        return Response({"data": "Hello World"})
+
+
+class TopSixAnimalsView(APIView):
+    def get(self, request):
+        animals = Animal.objects.all()[:6]
+        serializer = AnimalSerializer(animals, many=True)
+        return Response({"Status": "Ok", "data": serializer.data})
+
+
+class AnimalView(APIView):
+    def get(self, request, animal_accounting_card):
+        animal = Animal.objects.get(animal_accounting_card=animal_accounting_card)
+        serializer = AnimalSerializer(animal)
+        return Response({"Status": "Ok", "data": serializer.data})
+
+
+class AnimalFilterView(APIView):
+    def post(self, request):
+        if not request.data["filters"]:
+            search_request = request.data["search"]
+            animals = Animal.objects.filter(animal_name__contains=search_request)
+            paginator = Paginator(animals, 2)
+            page = request.data["page"]
+            paged_listings = paginator.get_page(page)
+            serializer = AnimalSerializer(paged_listings, many=True)
+            color_dict = dict()
+            for color in ANIMAL_COLOR_CHOICES:
+                color_dict[color[0]] = False
+            return Response({
+                "status": "ok",
+                "filters": {
+                    "kind": {"c": False, "d": False},
+                    "sex": {"m": False, "f": False},
+                    "size": {"s": False, "m": False, "l": False},
+                    "color": color_dict
+                },
+                "animals": serializer.data,
+                "total_page_count": paginator.num_pages,
+            })
+        else:
+            data = request.data["filters"]
+            search_request = request.data["search"]
+
+            chipped = (True,) if data["is_chipped"] else (True, False)
+            sterilization = (True,) if data["sterilization"] else (True, False)
+
+            animal_kind = []
+            if data["animal_kind"]["c"]:
+                animal_kind.append("c")
+            if data["animal_kind"]["d"]:
+                animal_kind.append("d")
+            if not animal_kind:
+                animal_kind = ["c", "d"]
+
+            animal_sex = []
+            if data["animal_sex"]["m"]:
+                animal_sex.append("m")
+            if data["animal_sex"]["f"]:
+                animal_sex.append("f")
+            if not animal_sex:
+                animal_sex = ["m", "f"]
+
+            animal_size = []
+            if data["animal_size"]["s"]:
+                animal_size.append("s")
+            if data["animal_size"]["m"]:
+                animal_size.append("m")
+            if data["animal_size"]["l"]:
+                animal_size.append("l")
+            if not animal_size:
+                animal_size = ["s", "m", "l"]
+
+            color_list = []
+            for key, value in data["color"]:
+                if value:
+                    color_list.append(key)
+
+            animals = Animal.objects.filter(name__contains=search_request,
+                                            kind__in=animal_kind,
+                                            sex__in=animal_sex,
+                                            animal_size__in=animal_size,
+                                            color__in=color_list)
+            paginator = Paginator(animals, 2)
+            page = request.data["page"]
+            paged_listings = paginator.get_page(page)
+            serializer = AnimalSerializer(paged_listings, many=True)
+            return Response({
+                "status": "ok",
+                "filters": request.data["filters"],
+                "animals": serializer.data,
+                "total_page_count": paginator.num_pages
+            })
+
+
+class ClientsApplicationsView(APIView):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
+        client = Client.objects.get(user=user)
+        applications = Application.objects.filter(client=client)
+
+    def post(self, request):
+        user = request.user
+        client = Client.objects.get(user=user)
+        animal = Animal.objects.get(animal_id=request.data["id"])
+        application = Application(client=client, animal=animal,
+                                  date=datetime.now(), quiz=request.data["answers"],
+                                  status="r")
+        application.save()
+        return Response({"status": "ok"})

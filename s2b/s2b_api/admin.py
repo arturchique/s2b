@@ -18,3 +18,8 @@ class ShelterAdmin(admin.ModelAdmin):
 @admin.register(Worker)
 class ShelterAdmin(admin.ModelAdmin):
     list_display = ('name', 'shelter', )
+
+
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    list_display = ('user', )
