@@ -98,8 +98,10 @@ class AdminAddView(APIView):
                 "doctor_name": {"values": "string", "*": 1, "text": "ФИО вет. врача"},
                 "socialized": {"values": "bool", "*": 1, "text": "Готово к социализации"},
                 "region": {"values": "string", "*": 1, "text": "Административный округ"},
-                "catching_act_order": {"values": "string", "*": 1, "text": "Заказ-наряд / акт о поступлении животного №"},
-                "catching_act_date": {"values": "string", "*": 1, "text": "Заказ-наряд / акт о поступлении животного, дата"},
+                "catching_act_order": {"values": "string", "*": 1,
+                                       "text": "Заказ-наряд / акт о поступлении животного №"},
+                "catching_act_date": {"values": "string", "*": 1,
+                                      "text": "Заказ-наряд / акт о поступлении животного, дата"},
                 "catching_act": {"values": "string", "*": 1, "text": "Акт отлова"},
                 "catching_address": {"values": "string", "*": 1, "text": "Адрес места отлова"},
                 "legal_entity": {"values": "string", "*": 0, "text": "Юр. Лицо"},
@@ -168,10 +170,12 @@ class AdminAddView(APIView):
                                 size=size, identifying_marks=data["identifying_marks"],
                                 animal_id=data["animal_id"], sterilization_date=data["sterilization_date"],
                                 doctor_name=data["doctor_name"], socialized=socialized, region=data["region"],
-                                catching_act_order=data["catching_act_order"], catching_act_date=data["catching_act_date"],
+                                catching_act_order=data["catching_act_order"],
+                                catching_act_date=data["catching_act_date"],
                                 catching_act=data["catching_act"], catching_address=data["catching_address"],
                                 legal_entity=data["legal_entity"], owner_name=data["owner_name"],
-                                person_owner_name=data["person_owner_name"], entrance_act_date=data["entrance_act_date"],
+                                person_owner_name=data["person_owner_name"],
+                                entrance_act_date=data["entrance_act_date"],
                                 entrance_act=data["entrance_act"], leaving_act_date=data["leaving_act_date"],
                                 leaving_act_reason=data["leaving_act_reason"],
                                 staff_name=data["staff_name"], parasites_treatment=data["parasites_treatment"],
@@ -240,6 +244,7 @@ class HelloView(APIView):
     """
     Hello World!)))))
     """
+
     def get(self, request):
         return Response({"data": "Hello World"})
 
@@ -342,6 +347,32 @@ class AnimalFilterView(APIView):
                 "animal_kind": animal_kind,
                 "animal_sex": animal_sex
             })
+
+
+class TestView(APIView):
+    def get(self):
+        return Response({
+            "questions": [
+                {"Были ли у Вас раньше животные, которые больше с Вами не проживают? ": ["Да", "Нет"]},
+                {"Какова судьба этих животных?": ["Живы", "Смерть от старости", "Смерть от болезни",
+                                                  "Живет не у меня"]},
+                {"Есть ли у вас домашние животные сейчас": ["Да", "Нет"]},
+                {"Были ли они стерелизованы? ": ["Да", "Нет"]},
+                {"Ваше отношение к стерилизации? ": ["Позитивно", "Нейтрально", "Негативно"]},
+                {"Есть ли у Вас дети?": ["Да", "Нет"]},
+                {"Где вы живете?": ["Квартира в собственности", "Частный дом в собственности",
+                                    "Арендуемая недвижимость"]},
+                {"Кто сможет присмотреть за животным, когда Вы в отъезде?": ["Соседи", "Родственники",
+                                                                             "Отель для животных"]},
+                {"В каких обстоятельствах Вы не готовы держать собаку?": ["Беременность", "Развод", "Потеря работы",
+                                                                          "Смена работы", "Переезд",
+                                                                          "Порча вещей животным", "Ветеринарные счета",
+                                                                          "Конфликты с другим питомцем"]},
+                {"С какой целью Вы берете животное?": ["Себе", "Родственникам", "Компаньоном другому животному"]},
+                {"Есть ли у проживающих с Вами аллергия на животных?": ["Да", "Нет"]},
+                {"Все члены семьи согласны завести животного?": ["Да", "Нет"]},
+            ]
+        })
 
 
 class ClientsApplicationsView(APIView):

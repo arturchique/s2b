@@ -30,5 +30,5 @@ urlpatterns = [
     path("admin/add/", AdminAddView.as_view()),
     path("admin/report/", AdminReport.as_view()),
     path("admin/delete/", AdminDeleteView.as_view()),
-
+    path("test/", TestView.as_view())
 ]
