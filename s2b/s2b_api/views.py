@@ -165,7 +165,25 @@ class AdminReport(APIView):
             shelters = "---------"
         card = Animal.objects.get(animal_accounting_card=animal_accounting_card, shelter__name__contains=shelters)
         try:
-            docx_export(card)
-            return Response({"status": "ok"})
+            path = docx_export(card)
+            return Response({"path": path})
         except:
             return Response({"status": "не удалось((("})
+
+
+class AdminDeleteView(APIView):
+    def post(self, request):
+        user = request.user
+        worker = Worker.objects.get(user=user)
+        if worker.position not in ("a", "w"):
+            return Response({"data": "Отказано в доступе"})
+        shelter = worker.shelter
+        data = request.data
+        deleted = "не удалено"
+        try:
+            animal = Animal.objects.get(animal_accounting_card=data["animal_accounting_card"], shelter=shelter)
+            animal.delete()
+            deleted = "удалено"
+        except Animal.DoesNotExist:
+            pass
+        return Response({"data": f"Животное {deleted}"})

@@ -114,5 +114,7 @@ def docx_export(card):
     doc.render(context)
     # нужно добавить адрес к директории где лежат фотки во 2 аргумент
     doc.replace_pic("53.jpg", f"media/photos/{card.animal_accounting_card}.jpg")
-    doc.save(f"media/reports/{card.animal_accounting_card}_{datetime.now().strftime('%d_%m_%Y_%H%M')}.docx")
+    outfile_path = f"media/reports/{card.animal_accounting_card}_{datetime.now().strftime('%d_%m_%Y_%H%M')}.docx"
+    doc.save(outfile_path)
+    return outfile_path
 
