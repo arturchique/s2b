@@ -105,7 +105,7 @@ class AdminAddView(APIView):
         if worker.position not in ("a", "w"):
             return Response({"data": "Отказано в доступе"})
         shelter = worker.shelter
-        data = request.data
+        data = request.data["data"]
 
         socialized = True if data["socialized"] == "true" else False
 
@@ -118,9 +118,12 @@ class AdminAddView(APIView):
         else:
             size = "l"
 
+        changed = "сохранено"
+
         try:
             animal = Animal.objects.get(animal_accounting_card=data["animal_accounting_card"])
             animal.delete()
+            changed = "изменено"
         except Animal.DoesNotExist:
             pass
 
@@ -143,6 +146,6 @@ class AdminAddView(APIView):
                                 anamnesis=data["anamnesis"]
                                 )
             new_animal.save()
-            return Response({"data": "Животное успешно сохранено"})
+            return Response({"data": f"Животное успешно {changed}"})
         except:
             return Response({"data": data})
