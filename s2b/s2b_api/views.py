@@ -334,7 +334,7 @@ class AnimalFilterView(APIView):
             animals = Animal.objects.filter(name__contains=search_request,
                                             kind__in=animal_kind,
                                             sex__in=animal_sex,
-                                            animal_size__in=animal_size,
+                                            size__in=animal_size,
                                             color__in=color_list,
                                             socialized=True)
             paginator = Paginator(animals, 15)
