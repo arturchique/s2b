@@ -330,6 +330,9 @@ class AnimalFilterView(APIView):
             for key in data["color"]:
                 if data["color"][key] == "true":
                     color_list.append(key)
+            if not color_list:
+                for key in data["color"]:
+                    color_list.append(key)
 
             animals = Animal.objects.filter(name__contains=search_request,
                                             kind__in=animal_kind,
