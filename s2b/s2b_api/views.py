@@ -8,6 +8,7 @@ from .serializers import *
 from .models import *
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from .glossary import *
+from .reports import docx_export
 
 
 class AdminView(APIView):
@@ -163,3 +164,8 @@ class AdminReport(APIView):
         else:
             shelters = "---------"
         card = Animal.objects.get(animal_accounting_card=animal_accounting_card, shelter__name__contains=shelters)
+        try:
+            docx_export(card)
+            return Response({"status": "ok"})
+        except:
+            return Response({"status": "не удалось((("})
