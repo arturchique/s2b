@@ -309,19 +309,19 @@ class AnimalFilterView(APIView):
                 animal_kind = ["c", "d"]
 
             animal_sex = []
-            if data["animal_sex"]["m"]:
+            if data["sex"]["m"]:
                 animal_sex.append("m")
-            if data["animal_sex"]["f"]:
+            if data["sex"]["f"]:
                 animal_sex.append("f")
             if not animal_sex:
                 animal_sex = ["m", "f"]
 
             animal_size = []
-            if data["animal_size"]["s"]:
+            if data["size"]["s"]:
                 animal_size.append("s")
-            if data["animal_size"]["m"]:
+            if data["size"]["m"]:
                 animal_size.append("m")
-            if data["animal_size"]["l"]:
+            if data["size"]["l"]:
                 animal_size.append("l")
             if not animal_size:
                 animal_size = ["s", "m", "l"]
