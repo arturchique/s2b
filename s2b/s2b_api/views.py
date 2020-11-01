@@ -259,7 +259,7 @@ class AnimalFilterView(APIView):
     def post(self, request):
         if not request.data["filters"]:
             search_request = request.data["search"]
-            animals = Animal.objects.filter(animal_name__contains=search_request)
+            animals = Animal.objects.filter(name__contains=search_request)
             paginator = Paginator(animals, 2)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
