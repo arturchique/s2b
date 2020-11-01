@@ -350,7 +350,7 @@ class AnimalFilterView(APIView):
 
 
 class TestView(APIView):
-    def get(self):
+    def get(self, request):
         return Response({
             "questions": [
                 {"Были ли у Вас раньше животные, которые больше с Вами не проживают? ": ["Да", "Нет"]},
