@@ -12,4 +12,5 @@ urlpatterns = [
     # path("quiz/", ClientsApplicationsView.as_view())
     path("admin/", AdminView.as_view()),
     path("admin/add/", AdminAddView.as_view()),
+    path("admin/report/", AdminReport.as_view())
 ]

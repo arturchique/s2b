@@ -27,7 +27,7 @@ class AdminView(APIView):
         user = request.user
         worker = Worker.objects.get(user=user)
         shelter = worker.shelter
-        if worker.position == "w":
+        if worker.position == "w" or worker.position == "a" or worker.position == "d":
             if not request.data["filters"]:
                 animals = Animal.objects.filter(shelter=shelter,
                                                 animal_accounting_card__contains=request.data["search"])
@@ -37,13 +37,13 @@ class AdminView(APIView):
                 serializer = AnimalSerializer(paged_listings, many=True)
                 return Response({
                     "data": serializer.data,
-                    "status": "w",
+                    "status": f"{worker.position}",
                     "total_page_count": paginator.num_pages
                 })
             else:
                 pass
         elif worker.position == "a":
-            return Response({"data": "Это админ приюта"})
+            return Response({"status": ""})
         return Response({"data": "ok"})
 
 
@@ -149,3 +149,17 @@ class AdminAddView(APIView):
             return Response({"data": f"Животное успешно {changed}"})
         except:
             return Response({"data": "Ошибка"})
+
+
+class AdminReport(APIView):
+    def get(self, request):
+        user = request.user
+        worker = Worker.objects.get(user=user)
+        animal_accounting_card = request.GET.get("animal_accounting_card", "---------")
+        if worker.position == "d":
+            shelters = ""
+        elif worker.position == "w" or worker.position == "a":
+            shelters = worker.shelter.name
+        else:
+            shelters = "---------"
+        card = Animal.objects.get(animal_accounting_card=animal_accounting_card, shelter__name__contains=shelters)
