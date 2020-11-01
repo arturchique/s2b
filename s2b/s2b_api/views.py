@@ -337,14 +337,16 @@ class AnimalFilterView(APIView):
                 "status": "ok",
                 "filters": request.data["filters"],
                 "animals": serializer.data,
-                "total_page_count": paginator.num_pages
+                "total_page_count": paginator.num_pages,
+                "animal_size": animal_size,
+                "animal_kind": animal_kind,
+                "animal_sex": animal_sex
             })
 
 
 class ClientsApplicationsView(APIView):
     def get(self, request, user_id):
         """
-
         Заявки клиента, не доделано
         """
         user = User.objects.get(id=user_id)
