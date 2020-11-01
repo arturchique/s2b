@@ -301,9 +301,9 @@ class AnimalFilterView(APIView):
             search_request = request.data["search"]
 
             animal_kind = []
-            if data["animal_kind"]["c"]:
+            if data["kind"]["c"]:
                 animal_kind.append("c")
-            if data["animal_kind"]["d"]:
+            if data["kind"]["d"]:
                 animal_kind.append("d")
             if not animal_kind:
                 animal_kind = ["c", "d"]
