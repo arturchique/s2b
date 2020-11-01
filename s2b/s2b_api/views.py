@@ -148,4 +148,4 @@ class AdminAddView(APIView):
             new_animal.save()
             return Response({"data": f"Животное успешно {changed}"})
         except:
-            return Response({"data": data})
+            return Response({"data": "Ошибка"})
