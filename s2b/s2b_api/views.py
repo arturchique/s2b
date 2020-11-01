@@ -327,7 +327,8 @@ class AnimalFilterView(APIView):
                                             kind__in=animal_kind,
                                             sex__in=animal_sex,
                                             size__in=animal_size,
-                                            socialized=True)
+                                            #socialized=True
+                                            )
             paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
