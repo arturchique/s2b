@@ -282,16 +282,13 @@ class AnimalFilterView(APIView):
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
             serializer = AnimalSerializer(paged_listings, many=True)
-            color_dict = dict()
-            for color in ANIMAL_COLOR_CHOICES:
-                color_dict[color[0]] = False
+
             return Response({
                 "status": "ok",
                 "filters": {
                     "kind": {"c": False, "d": False},
                     "sex": {"m": False, "f": False},
                     "size": {"s": False, "m": False, "l": False},
-                    "color": color_dict
                 },
                 "animals": serializer.data,
                 "total_page_count": paginator.num_pages,
@@ -326,19 +323,10 @@ class AnimalFilterView(APIView):
             if not animal_size:
                 animal_size = ["s", "m", "l"]
 
-            color_list = []
-            for key in data["color"]:
-                if data["color"][key] == "true":
-                    color_list.append(key)
-            if not color_list:
-                for key in data["color"]:
-                    color_list.append(key)
-
             animals = Animal.objects.filter(name__contains=search_request,
                                             kind__in=animal_kind,
                                             sex__in=animal_sex,
                                             size__in=animal_size,
-                                            color__in=color_list,
                                             socialized=True)
             paginator = Paginator(animals, 15)
             page = request.data["page"]
