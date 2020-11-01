@@ -127,8 +127,8 @@ class AdminAddView(APIView):
         except Animal.DoesNotExist:
             pass
 
-        # try:
-        new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
+        try:
+            new_animal = Animal(animal_accounting_card=data["animal_accounting_card"], kind=data["kind"],
                                 birth_date=data["birth_date"], weight=float(data["weight"]), shelter=shelter,
                                 name=data["name"], sex=sex, breed=data["breed"], cage_number=int(data["cage_number"]),
                                 color=data["color"], hair=data["hair"], ears=data["ears"], tail=data["tail"],
@@ -145,7 +145,7 @@ class AdminAddView(APIView):
                                 vaccinations=data["vaccinations"], medical_checkup_date=data["medical_checkup_date"],
                                 anamnesis=data["anamnesis"]
                                 )
-        new_animal.save()
-        return Response({"data": f"Животное успешно {changed}"})
-        # except:
-        #     return Response({"data": data})
+            new_animal.save()
+            return Response({"data": f"Животное успешно {changed}"})
+        except:
+            return Response({"data": data})
