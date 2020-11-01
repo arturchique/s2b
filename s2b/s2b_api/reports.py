@@ -26,9 +26,7 @@ def docx_export(card):
         'size': card.size,
         'identifying_marks': card.identifying_marks,
         'animal_id': card.animal_id,
-        'sterilization_date': str(card.sterilization_date.strftime("«%d»")) +
-                              str(month_list[card.sterilization_date.month - 1].capitalize()) +
-                              str(card.sterilization_date.strftime("%Y года")),
+        'sterilization_date': card.sterilization_date,
         'doctor_name': card.doctor_name,
         'socialized': card.socialized,
         'catching_act': card.catching_act,
@@ -36,13 +34,9 @@ def docx_export(card):
         'legal_entity': card.legal_entity,
         'owner_name': card.owner_name,
         'person_owner_name': card.person_owner_name,
-        'entrance_act_date': str(card.entrance_act_date.strftime("«%d»")) +
-                             str(month_list[card.entrance_act_date.month - 1].capitalize()) +
-                             str(card.entrance_act_date.strftime("%Y года")),
+        'entrance_act_date': card.entrance_act_date,
         'entrance_act': card.entrance_act,
-        'leaving_act_date': str(card.leaving_act_date.strftime("«%d»")) +
-                            str(month_list[card.leaving_act_date.month - 1].capitalize()) +
-                            str(card.leaving_act_date.strftime("%Y года")),
+        'leaving_act_date': card.leaving_act_date,
         'leaving_act': card.leaving_act,
         'leaving_act_reason': card.leaving_act_reason,
         'tbl_parasites': [
@@ -119,6 +113,6 @@ def docx_export(card):
     doc = DocxTemplate(infile_path)
     doc.render(context)
     # нужно добавить адрес к директории где лежат фотки во 2 аргумент
-    doc.replace_pic("media/photos/example.jpg", f"media/photos/{card.animal_accounting_car}.jpg")
+    doc.replace_pic("53.jpg", f"media/photos/{card.animal_accounting_card}.jpg")
     doc.save(f"media/reports/{card.animal_accounting_card}_{datetime.now().strftime('%d_%m_%Y_%H%M')}.docx")
 

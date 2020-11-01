@@ -86,15 +86,15 @@ class AdminAddView(APIView):
                 "leaving_act_reason": {"values": [reason[0] for reason in LEAVING_REASON_CHOICES],
                                        "*": 0,
                                        "text": "Причина выбытия из приюта"},
-                "staff_name": {"values": "string", "*": 1, "text": "ФИО сотрудника по уходу за животным"},
+                "staff_name": {"values": "string", "*": 0, "text": "ФИО сотрудника по уходу за животным"},
                 "parasites_treatment": {"values": "string",
-                                        "*": 1,
+                                        "*": 0,
                                         "text": "Сведения об обработке от паразитов ('Дата Препарат Доза' по порядку)"},
                 "vaccinations": {"values": "string",
-                                 "*": 1,
+                                 "*": 0,
                                  "text": "Сведения о вакцинации ('Дата Вид вакцины № серии' по порядку"},
-                "medical_checkup_date": {"values": "string", "*": 1, "text": "Дата мед. осмотра"},
-                "anamnesis": {"values": "string", "*": 1, "text": "Анамнез"},
+                "medical_checkup_date": {"values": "string", "*": 0, "text": "Дата мед. осмотра"},
+                "anamnesis": {"values": "string", "*": 0, "text": "Анамнез"},
 
             })
         else:
