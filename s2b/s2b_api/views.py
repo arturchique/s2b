@@ -237,12 +237,18 @@ class AdminDeleteView(APIView):
 
 
 class HelloView(APIView):
+    """
+    Hello World!)))))
+    """
     def get(self, request):
         return Response({"data": "Hello World"})
 
 
 class TopSixAnimalsView(APIView):
     def get(self, request):
+        """
+        Возвращает список из шести животных готовых к социализации (Фронтенд-Пользовательский)
+        """
         animals = Animal.objects.all()[:6]
         serializer = AnimalSerializer(animals, many=True)
         return Response({"Status": "Ok", "data": serializer.data})
@@ -250,6 +256,9 @@ class TopSixAnimalsView(APIView):
 
 class AnimalView(APIView):
     def get(self, request, animal_accounting_card):
+        """
+        Возвращает конкретное животное по номеру карточки (Фронтенж-Пользовательский)
+        """
         animal = Animal.objects.get(animal_accounting_card=animal_accounting_card)
         serializer = AnimalSerializer(animal)
         return Response({"Status": "Ok", "data": serializer.data})
@@ -257,9 +266,18 @@ class AnimalView(APIView):
 
 class AnimalFilterView(APIView):
     def post(self, request):
+        """
+        Возвращает отфильтрованный список животных. Если поле filter пустое, то возвращает всех зверей,
+        готовых к социализации и списсок фильтров для отрисовки на странице
+
+        формат:
+        filters: либо пустое поле, либо объект полученный при передаче запроса с пустым полем
+        search: поисковой запрос
+        page: номер страницы (для пагинации)
+        """
         if not request.data["filters"]:
             search_request = request.data["search"]
-            animals = Animal.objects.filter(name__contains=search_request)
+            animals = Animal.objects.filter(name__contains=search_request, socialized=True)
             paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
@@ -281,9 +299,6 @@ class AnimalFilterView(APIView):
         else:
             data = request.data["filters"]
             search_request = request.data["search"]
-
-            chipped = (True,) if data["is_chipped"] else (True, False)
-            sterilization = (True,) if data["sterilization"] else (True, False)
 
             animal_kind = []
             if data["animal_kind"]["c"]:
@@ -320,7 +335,8 @@ class AnimalFilterView(APIView):
                                             kind__in=animal_kind,
                                             sex__in=animal_sex,
                                             animal_size__in=animal_size,
-                                            color__in=color_list)
+                                            color__in=color_list,
+                                            socialized=True)
             paginator = Paginator(animals, 15)
             page = request.data["page"]
             paged_listings = paginator.get_page(page)
@@ -335,11 +351,18 @@ class AnimalFilterView(APIView):
 
 class ClientsApplicationsView(APIView):
     def get(self, request, user_id):
+        """
+
+        Заявки клиента, не доделано
+        """
         user = User.objects.get(id=user_id)
         client = Client.objects.get(user=user)
         applications = Application.objects.filter(client=client)
 
     def post(self, request):
+        """
+        Заявки клиента, не доделано
+        """
         user = request.user
         client = Client.objects.get(user=user)
         animal = Animal.objects.get(animal_id=request.data["id"])
